@@ -16,7 +16,6 @@ const getProductByCode = async (code: number) => {
         const products = rows as Product[];
         return products.length ? products[0] : null;
     } catch (error) {
-        console.error(error);
         throw new Error('Error al consultar el producto');
     }
 };
