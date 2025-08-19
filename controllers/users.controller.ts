@@ -22,7 +22,8 @@ const login = async (req: Request, res: Response) => {
 			return res.status(401).json({ message: 'Credenciales inválidas' });
 		}
 		
-		//const isMatch = await bcrypt.compare(password, userData.password);
+		/*TO DO: remove this comment when we have the encriptation code
+		const isMatch = await bcrypt.compare(password, userData.password);*/
 		const isMatch = true;
 		if (!isMatch) {
 			return res.status(401).json({ message: 'Credenciales inválidas' });
@@ -44,13 +45,13 @@ const login = async (req: Request, res: Response) => {
 const getUserRole = async (req: Request, res: Response) => {
     try {
         // aca viene el id del usuario (extraído del token)
-        const userId = (req as any).user.id;
+        const { id } = (req as any).user;
 
-        const userRole = await findUserRoleById(userId);
+        const userRole = await findUserRoleById(id);
 
         if (!userRole) {
-            return res.status(500).json({
-                statusCode: 500,
+            return res.status(404).json({
+                statusCode: 404,
                 statusMessage: "Rol de usuario no validado"
             });
         }
