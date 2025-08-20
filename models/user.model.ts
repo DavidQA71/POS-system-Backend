@@ -45,5 +45,4 @@ const findUserRoleById = async (userId: number) => {
 };
 
 
-export { findUserByEmail };
-export { findUserRoleById };
+export { findUserByEmail, findUserRoleById };

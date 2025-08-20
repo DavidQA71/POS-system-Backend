@@ -72,5 +72,4 @@ const getUserRole = async (req: Request, res: Response) => {
 
 
 
-export { login };
-export { getUserRole };
+export { login, getUserRole };
