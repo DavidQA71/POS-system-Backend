@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { findUserByEmail } from '../models/user.model';
+import { findUserByEmail, findUserRoleById } from '../models/user.model';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
@@ -22,7 +22,9 @@ const login = async (req: Request, res: Response) => {
 			return res.status(401).json({ message: 'Credenciales inválidas' });
 		}
 		
-		const isMatch = await bcrypt.compare(password, userData.password);
+		/*TO DO: remove this comment when we have the encriptation code
+		const isMatch = await bcrypt.compare(password, userData.password);*/
+		const isMatch = true;
 		if (!isMatch) {
 			return res.status(401).json({ message: 'Credenciales inválidas' });
 		}
@@ -37,4 +39,37 @@ const login = async (req: Request, res: Response) => {
 		});
 	}
 };
-export { login };
+
+
+
+const getUserRole = async (req: Request, res: Response) => {
+    try {
+        // aca viene el id del usuario (extraído del token)
+        const { id } = (req as any).user;
+
+        const userRole = await findUserRoleById(id);
+
+        if (!userRole) {
+            return res.status(404).json({
+                statusCode: 404,
+                statusMessage: "Rol de usuario no validado"
+            });
+        }
+
+        res.status(200).json({
+            statusCode: 200,
+            statusMessage: "Rol encontrado",
+            name: userRole.name,
+            role: userRole.role
+        });
+    } catch (error) {
+        res.status(500).json({
+            statusCode: 500,
+            statusMessage: "Error interno"
+        });
+    }
+};
+
+
+
+export { login, getUserRole };
