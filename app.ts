@@ -1,7 +1,7 @@
 //importamos el framework express
 import express, { Express, Request, Response } from 'express';
 import userRoutes from './routes/users.routes';
-//import productsRoutes from './routes/products.routes';
+import productsRoutes from './routes/products.routes';
 
 // creamos una instancia de express
 const app = express();
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 //definimos las rutas
 
 app.use('/users', userRoutes);
-//app.use('/products', productsRoutes);
+app.use('/products', productsRoutes);
 
 app.listen(port, () => {
 	console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
