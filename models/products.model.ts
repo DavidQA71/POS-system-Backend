@@ -20,4 +20,18 @@ const getProductByCode = async (code: number) => {
     }
 };
 
-export { getProductByCode };
+const getProductByDescription = async (description: string) => {
+    try {
+        const [rows] = await db.execute(
+            'SELECT id, description, price, stock FROM products WHERE description LIKE ?',
+            [`%${description}%`]
+        );
+        const products = rows as Product[];
+        return products;
+    } catch (error) {
+        throw new Error('Error al consultar el producto');
+    }
+};
+
+
+export { getProductByCode, getProductByDescription };
