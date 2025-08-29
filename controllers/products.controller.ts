@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getProductByCode, getProductByDescription, insertTempSalesItem } from '../models/products.model';
+import { getProductByCode, getProductByDescription, getTempItemByCode, insertTempSalesItem } from '../models/products.model';
 
 const getProductsByCode = async (req: Request, res: Response) => {
     const code = Number(req.params.code);
@@ -75,4 +75,36 @@ const getProductsByDescription = async (req: Request, res: Response) => {
   }
 };
 
-export { getProductsByCode, getProductsByDescription, addTempSalesItem };
+const getTempSalesItem = async (req: Request, res: Response) => {
+  try {
+    const { code } = req.params; // product_id
+
+    const item = await getTempItemByCode(Number(code));
+
+    if (item) {
+      return res.status(200).json({
+        statusCode: 200,
+        statusMessage: "Producto encontrado",
+        product: {
+          description: item.description,
+          price: item.unit_price,
+          quantity: item.quantity
+        }
+      });
+    } else {
+      return res.status(404).json({
+        statusCode: 404,
+        statusMessage: "Producto no encontrado en la tabla temporal"
+      });
+    }
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      statusCode: 500,
+      statusMessage: "Error al buscar producto temporal"
+    });
+  }
+};
+
+export { getProductsByCode, getProductsByDescription, addTempSalesItem, getTempSalesItem };

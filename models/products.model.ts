@@ -7,6 +7,13 @@ interface Product {
 	stock: number;
 }
 
+interface TempSalesItem {
+	product_id: number;
+	quantity: number;
+	unit_price: number;
+  description: string;
+}
+
 const getProductByCode = async (code: number) => {
     try {
         const [rows] = await db.execute(
@@ -50,4 +57,25 @@ const insertTempSalesItem = async (item: {
   }
 };
 
-export { getProductByCode, getProductByDescription, insertTempSalesItem };
+const getTempItemByCode = async (product_id: number) => {
+    try {
+        const [rows] = await db.execute(
+            `SELECT t.quantity, t.unit_price, p.description
+            FROM temporary_sales_items t
+            JOIN products p ON t.product_id = p.id
+            WHERE t.product_id = ?`,
+            [product_id]
+        );
+        const items = rows as TempSalesItem[];
+        return items.length ? items[0] : null;
+    } catch (error) {
+        throw new Error('Error al consultar el producto');
+    }
+};
+
+export { 
+  getProductByCode, 
+  getProductByDescription, 
+  insertTempSalesItem, 
+  getTempItemByCode 
+};
