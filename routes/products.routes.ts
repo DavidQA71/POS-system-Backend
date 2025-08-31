@@ -3,7 +3,9 @@ import {
   addTempSalesItem, 
   getProductsByCode, 
   getProductsByDescription, 
-  getTempSalesItem 
+  getTempSalesItem, 
+  updateTempSalesItem,
+  deleteTempSalesItem
 } from '../controllers/products.controller';
 import { authenticateToken } from '../middlewares/auth.middleware';
 
@@ -15,7 +17,11 @@ router.get('/:code', authenticateToken, getProductsByCode);
 router.get('/', authenticateToken, getProductsByDescription);
 //agregar producto a tabla temporaria
 router.post('/temp-sales-items', authenticateToken, addTempSalesItem);
-//editar producto de la tabla temporaria
+//obtener producto de la tabla temporaria para luego editar
 router.get('/temp-sales-items/:code', authenticateToken, getTempSalesItem);
+//editar producto de la tabla temporaria
+router.patch('/temp-sales-items/:code', authenticateToken, updateTempSalesItem);
+//eliminar producto de la tabla temporaria
+router.delete('/temp-sales-items/:code', authenticateToken, deleteTempSalesItem);
 
 export default router;

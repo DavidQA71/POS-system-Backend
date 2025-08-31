@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getProductByCode, getProductByDescription, getTempItemByCode, insertTempSalesItem } from '../models/products.model';
+import { deleteTempItemByCode, getProductByCode, getProductByDescription, getTempItemByCode, insertTempSalesItem, updateTempItemQuantity } from '../models/products.model';
 
 const getProductsByCode = async (req: Request, res: Response) => {
     const code = Number(req.params.code);
@@ -77,7 +77,7 @@ const getProductsByDescription = async (req: Request, res: Response) => {
 
 const getTempSalesItem = async (req: Request, res: Response) => {
   try {
-    const { code } = req.params; // product_id
+    const { code } = req.params; // Aquí 'code' es el ID del item temporal
 
     const item = await getTempItemByCode(Number(code));
 
@@ -107,4 +107,71 @@ const getTempSalesItem = async (req: Request, res: Response) => {
   }
 };
 
-export { getProductsByCode, getProductsByDescription, addTempSalesItem, getTempSalesItem };
+const updateTempSalesItem = async (req: Request, res: Response) => {
+  try {
+    const { code } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || isNaN(quantity) || quantity <= 0) {
+      return res.status(400).json({
+        statusCode: 400,
+        statusMessage: "Cantidad inválida",
+      });
+    }
+
+    const updated = await updateTempItemQuantity(Number(code), quantity);
+
+    if (!updated) {
+      return res.status(500).json({
+        statusCode: 500,
+        statusMessage: "Producto no actualizado",
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: 200,
+      statusMessage: "Producto temporal actualizado",
+    });
+  } catch (error) {
+    console.error("Error al actualizar producto temporal:", error);
+    return res.status(500).json({
+      statusCode: 500,
+      statusMessage: "Producto no actualizado",
+    });
+  }
+};
+
+  const deleteTempSalesItem = async (req: Request, res: Response) => {
+  try {
+    const { code } = req.params;
+
+    const deleted = await deleteTempItemByCode(Number(code));
+
+    if (!deleted) {
+      return res.status(404).json({
+        statusCode: 404,
+        statusMessage: "Producto no encontrado o no eliminado",
+      });
+    }
+
+    return res.status(200).json({
+      statusCode: 200,
+      statusMessage: "Producto temporal eliminado",
+    });
+  } catch (error) {
+    console.error("Error al eliminar producto temporal:", error);
+    return res.status(500).json({
+      statusCode: 500,
+      statusMessage: "Error producto no eliminado",
+    });
+  }
+};
+
+export { 
+  getProductsByCode, 
+  getProductsByDescription, 
+  addTempSalesItem, 
+  getTempSalesItem, 
+  updateTempSalesItem, 
+  deleteTempSalesItem 
+};
