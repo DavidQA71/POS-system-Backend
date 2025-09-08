@@ -1,9 +1,9 @@
 import express from 'express';
 import { 
-  addTempSalesItem, 
+  insertTempProducts, 
   getProductsByCode, 
   getProductsByDescription, 
-  getTempSalesItem, 
+  getTempProducts, 
   updateTempSalesItem,
   deleteTempSalesItem
 } from '../controllers/products.controller';
@@ -16,9 +16,9 @@ router.get('/:code', authenticateToken, getProductsByCode);
 //obtener productos por string
 router.get('/', authenticateToken, getProductsByDescription);
 //agregar producto a tabla temporaria
-router.post('/temp-sales-items', authenticateToken, addTempSalesItem);
+router.post('/temp-sales-items', authenticateToken, insertTempProducts);
 //obtener producto de la tabla temporaria para luego editar
-router.get('/temp-sales-items/:code', authenticateToken, getTempSalesItem);
+router.get('/temp-sales-items/:code', authenticateToken, getTempProducts);
 //editar producto de la tabla temporaria
 router.patch('/temp-sales-items/:code', authenticateToken, updateTempSalesItem);
 //eliminar producto de la tabla temporaria

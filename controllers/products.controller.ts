@@ -33,26 +33,27 @@ const getProductsByDescription = async (req: Request, res: Response) => {
     }
 }
 
- const addTempSalesItem = async (req: Request, res: Response) => {
+const insertTempProducts = async (req: Request, res: Response) => {
   try {
-    const { product_id, quantity, unit_price } = req.body;
+    const { product_id: productId, quantity, unit_price: unitPrice } = req.body;
 
-    if (!product_id || !quantity || !unit_price) {
+
+    if (!productId || !quantity || !unitPrice) {
       return res.status(500).json({ 
         statusCode: 500, 
-        statusMessage: "Producto no agregado" 
+        statusMessage: "Todos los campos son obligatorios" 
       });
     }
 
     if (quantity <= 0) {
       return res.status(403).json({ 
         statusCode: 403, 
-        statusMessage: "No es posible agregar esa cantidad" 
+        statusMessage: "No es posible agregar cantidad menores o iguales a cero" 
       });
     }
 
     // Insertar en la tabla temporal
-    const result: any = await insertTempSalesItem({ product_id, quantity, unit_price });
+    const result: any = await insertTempSalesItem({ productId, quantity, unitPrice });
 
     if (result.affectedRows > 0) {
       return res.status(200).json({ 
@@ -75,7 +76,7 @@ const getProductsByDescription = async (req: Request, res: Response) => {
   }
 };
 
-const getTempSalesItem = async (req: Request, res: Response) => {
+const getTempProducts = async (req: Request, res: Response) => {
   try {
     const { code } = req.params; // Aquí 'code' es el ID del item temporal
 
@@ -87,14 +88,14 @@ const getTempSalesItem = async (req: Request, res: Response) => {
         statusMessage: "Producto encontrado",
         product: {
           description: item.description,
-          price: item.unit_price,
+          price: item.unitPrice,
           quantity: item.quantity
         }
       });
     } else {
       return res.status(404).json({
         statusCode: 404,
-        statusMessage: "Producto no encontrado en la tabla temporal"
+        statusMessage: "Producto no encontrado en la tabla"
       });
     }
 
@@ -102,7 +103,7 @@ const getTempSalesItem = async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).json({
       statusCode: 500,
-      statusMessage: "Error al buscar producto temporal"
+      statusMessage: "Error al buscar producto"
     });
   }
 };
@@ -170,8 +171,8 @@ const updateTempSalesItem = async (req: Request, res: Response) => {
 export { 
   getProductsByCode, 
   getProductsByDescription, 
-  addTempSalesItem, 
-  getTempSalesItem, 
+  insertTempProducts, 
+  getTempProducts, 
   updateTempSalesItem, 
   deleteTempSalesItem 
 };

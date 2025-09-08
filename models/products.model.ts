@@ -9,10 +9,16 @@ interface Product {
 
 interface TempSalesItem {
   id: number;
-	product_id: number;
+	productId: number;
 	quantity: number;
-	unit_price: number;
+	unitPrice: number;
   description: string;
+}
+
+interface Item {
+  productId: number; 
+  quantity: number; 
+  unitPrice: number; 
 }
 
 const getProductByCode = async (code: number) => {
@@ -41,16 +47,11 @@ const getProductByDescription = async (description: string) => {
     }
 };
 
-const insertTempSalesItem = async (item: {
-  product_id: number; 
-  quantity: number; 
-  unit_price: number; 
-}) => {
-  const { product_id, quantity, unit_price } = item;
+const insertTempSalesItem = async (item: Item) => {
   try {
     const [result] = await db.execute(
       `INSERT INTO temporary_sales_items (product_id, quantity, unit_price) VALUES (?, ?, ?)`,
-      [product_id, quantity, unit_price]
+      [item.productId, item.quantity, item.unitPrice]
     );
     return result;
   } catch (error) {
