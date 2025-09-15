@@ -47,11 +47,27 @@ const getProductByDescription = async (description: string) => {
     }
 };
 
-const insertTempSalesItem = async (item: Item) => {
+const getAllTemporaryProducts = async () => {
+  try {
+    const [rows] = await db.execute(
+      'SELECT t.id, p.description, t.quantity, t.unit_price FROM temporary_sales_items t JOIN products p ON t.product_id = p.id'
+    );
+    return rows as TempSalesItem[];
+  } catch (error) {
+    throw new Error('Error al consultar los productos temporales');
+  }
+};
+
+
+const insertTempSalesItem = async ({
+  productId, 
+  quantity,
+  unitPrice 
+}: Item) => {
   try {
     const [result] = await db.execute(
       `INSERT INTO temporary_sales_items (product_id, quantity, unit_price) VALUES (?, ?, ?)`,
-      [item.productId, item.quantity, item.unitPrice]
+      [productId, quantity, unitPrice]
     );
     return result;
   } catch (error) {
@@ -120,6 +136,7 @@ const itemsBefore = rowsBefore as TempSalesItem[];
 };
 
 export { 
+  getAllTemporaryProducts,
   getProductByCode, 
   getProductByDescription, 
   insertTempSalesItem, 

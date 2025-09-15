@@ -1,11 +1,7 @@
 import express from 'express';
 import { 
-  insertTempProducts, 
   getProductsByCode, 
-  getProductsByDescription, 
-  getTempProducts, 
-  updateTempSalesItem,
-  deleteTempSalesItem
+  getProductsByDescription,
 } from '../controllers/products.controller';
 import { authenticateToken } from '../middlewares/auth.middleware';
 
@@ -15,13 +11,12 @@ const router = express.Router();
 router.get('/:code', authenticateToken, getProductsByCode);
 //obtener productos por string
 router.get('/', authenticateToken, getProductsByDescription);
-//agregar producto a tabla temporaria
-router.post('/temp-sales-items', authenticateToken, insertTempProducts);
-//obtener producto de la tabla temporaria para luego editar
-router.get('/temp-sales-items/:code', authenticateToken, getTempProducts);
-//editar producto de la tabla temporaria
-router.patch('/temp-sales-items/:code', authenticateToken, updateTempSalesItem);
-//eliminar producto de la tabla temporaria
-router.delete('/temp-sales-items/:code', authenticateToken, deleteTempSalesItem);
+
 
 export default router;
+
+
+//me falta el get de temp como el segundo get, que es para traer todos los productos de la tabla temporaria
+
+//y el get de temp/:code que es para traer un producto en particular de la tabla temporaria
+

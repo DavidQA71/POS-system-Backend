@@ -1,5 +1,13 @@
 import { Request, Response } from 'express';
-import { deleteTempItemByCode, getProductByCode, getProductByDescription, getTempItemByCode, insertTempSalesItem, updateTempItemQuantity } from '../models/products.model';
+import { 
+  deleteTempItemByCode, 
+  getProductByCode, 
+  getProductByDescription, 
+  getTempItemByCode, 
+  insertTempSalesItem, 
+  updateTempItemQuantity,
+  getAllTemporaryProducts 
+} from '../models/products.model';
 
 const getProductsByCode = async (req: Request, res: Response) => {
     const code = Number(req.params.code);
@@ -32,6 +40,18 @@ const getProductsByDescription = async (req: Request, res: Response) => {
             message: 'Error interno del servidor' });
     }
 }
+
+const getAllTempProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getAllTemporaryProducts();
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).json({
+      statusCode: 500,
+      statusMessage: "Error al obtener productos temporales",
+    });
+  }
+};
 
 const insertTempProducts = async (req: Request, res: Response) => {
   try {
@@ -108,7 +128,7 @@ const getTempProducts = async (req: Request, res: Response) => {
   }
 };
 
-const updateTempSalesItem = async (req: Request, res: Response) => {
+const updateTempProducts = async (req: Request, res: Response) => {
   try {
     const { code } = req.params;
     const { quantity } = req.body;
@@ -142,7 +162,7 @@ const updateTempSalesItem = async (req: Request, res: Response) => {
   }
 };
 
-  const deleteTempSalesItem = async (req: Request, res: Response) => {
+  const deleteTempProducts = async (req: Request, res: Response) => {
   try {
     const { code } = req.params;
 
@@ -169,10 +189,11 @@ const updateTempSalesItem = async (req: Request, res: Response) => {
 };
 
 export { 
+  getAllTempProducts,
   getProductsByCode, 
   getProductsByDescription, 
   insertTempProducts, 
   getTempProducts, 
-  updateTempSalesItem, 
-  deleteTempSalesItem 
+  updateTempProducts, 
+  deleteTempProducts 
 };
