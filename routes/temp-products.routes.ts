@@ -5,7 +5,7 @@ import {
   updateTempProducts,
   deleteTempProducts,
   getAllTempProducts
-} from '../controllers/products.controller';
+} from '../controllers/temp-products.controller';
 import { authenticateToken } from '../middlewares/auth.middleware';
 
 const router = express.Router();
