@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { getProductByCode, getProductByDescription } from '../models/products.model';
+import {  
+  getProductByCode, 
+  getProductByDescription
+} from '../models/products.model';
 
 const getProductsByCode = async (req: Request, res: Response) => {
     const code = Number(req.params.code);
@@ -34,4 +37,8 @@ const getProductsByDescription = async (req: Request, res: Response) => {
 }
 
 
-export { getProductsByCode, getProductsByDescription };
+
+export { 
+  getProductsByCode, 
+  getProductsByDescription
+};

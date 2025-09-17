@@ -2,6 +2,7 @@
 import express, { Express, Request, Response } from 'express';
 import userRoutes from './routes/users.routes';
 import productsRoutes from './routes/products.routes';
+import tempProductsRoutes from './routes/temp-products.routes';
 
 // creamos una instancia de express
 const app = express();
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use('/users', userRoutes);
 app.use('/products', productsRoutes);
+app.use('/temp-products', tempProductsRoutes);
 
 app.listen(port, () => {
 	console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

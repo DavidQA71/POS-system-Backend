@@ -7,6 +7,8 @@ interface Product {
 	stock: number;
 }
 
+
+
 const getProductByCode = async (code: number) => {
     try {
         const [rows] = await db.execute(
@@ -34,4 +36,8 @@ const getProductByDescription = async (description: string) => {
 };
 
 
-export { getProductByCode, getProductByDescription };
+
+export { 
+  getProductByCode, 
+  getProductByDescription, 
+};
