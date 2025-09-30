@@ -4,6 +4,7 @@ import userRoutes from './routes/users.routes';
 import productsRoutes from './routes/products.routes';
 import tempProductsRoutes from './routes/temp-products.routes';
 import configurationsRoutes from './routes/configurations.routes';
+import salesRoutes from './routes/sales.routes';
 
 // creamos una instancia de express
 const app = express();
@@ -36,6 +37,7 @@ app.use('/users', userRoutes);
 app.use('/products', productsRoutes);
 app.use('/temp-products', tempProductsRoutes);
 app.use('/configurations', configurationsRoutes);
+app.use('/sales', salesRoutes);
 
 app.listen(port, () => {
 	console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
