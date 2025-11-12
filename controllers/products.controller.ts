@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import {  
   getProductByCode, 
-  getProductByDescription
+  getProductByDescription,
+  getStock
 } from '../models/products.model';
 
 const getProductsByCode = async (req: Request, res: Response) => {
@@ -37,8 +38,29 @@ const getProductsByDescription = async (req: Request, res: Response) => {
 }
 
 
+const getStockProducts = async (req: Request, res: Response) => {
+	const { page, size, description, price } = req.query;
+
+	try {
+		const products = await getStock(
+			Number(page || 1),
+			Number(size || 10),
+			description as string,
+			price ? Number(price) : undefined
+		);
+		if (!products) {
+			return res.status(404).json({ message: 'No hay productos disponibles' });
+		}
+		return res.status(200).json(products);
+	} catch (error) {
+		return res.status(500).json({
+			message: 'Error del servidor: no se pudo acceder a la base de datos',
+		});
+	}
+};
 
 export { 
   getProductsByCode, 
-  getProductsByDescription
+  getProductsByDescription,
+  getStockProducts
 };

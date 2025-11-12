@@ -5,6 +5,8 @@ import productsRoutes from './routes/products.routes';
 import tempProductsRoutes from './routes/temp-products.routes';
 import configurationsRoutes from './routes/configurations.routes';
 import salesRoutes from './routes/sales.routes';
+import cors from 'cors';
+
 
 // creamos una instancia de express
 const app = express();
@@ -16,7 +18,9 @@ app.set('port', port);
 // Middleware para parsear automáticamente (o convierta) el cuerpo de las peticiones HTTP que llegan en formato JSON a un objeto JavaScript que puedas manejar en tu código.
 app.use(express.json());
 
-// Middleware para configurar el CORS
+app.use(cors());
+
+/* // Middleware para configurar el CORS
 app.use((req, res, next) => {
 	//Permite que cualquier dominio (*) pueda hacer solicitudes a este servidor.
 	res.header('Access-Control-Allow-Origin', '*');
@@ -29,7 +33,7 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
 	//Llama a la siguiente función en la cadena de middlewares para que Express continúe procesando la solicitud.
 	next();
-});
+}); */
 
 //definimos las rutas
 
