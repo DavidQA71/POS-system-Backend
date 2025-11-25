@@ -13,6 +13,13 @@ interface ProductResponse {
   values: Product[];
 }
 
+interface GetStockParams {
+  page: number;
+  size: number;
+  description?: string;
+  price?: number;
+}
+
 const getProductByCode = async (code: number) => {
     try {
         const [rows] = await db.execute(
@@ -40,12 +47,12 @@ const getProductByDescription = async (description: string) => {
 };
 
 
-const getStock = async (
-	page: number,
-	size: number,
-	description?: string,
-	price?: number
-): Promise<ProductResponse> => {
+const getStock = async ({ 
+  page, 
+  size, 
+  description, 
+  price 
+}: GetStockParams): Promise<ProductResponse> => {
 	const limit = size;
 	const to = (page - 1) * size;
 	const whereClauses: string[] = [];
