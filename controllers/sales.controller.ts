@@ -43,7 +43,7 @@ const insertSale = async (req: Request, res: Response) => {
     }
 
     // 4. Vaciar la tabla temporaria
-    await clearTempProds();
+    await clearTempProds(userId);
 
     return res.status(200).json({
       statusCode: 200,

@@ -1,6 +1,6 @@
 import { db } from "../config/db";
 
-export interface Sale {
+export interface ISales {
   id: number;
   ticketNumber: number;
   userId: number;
@@ -8,7 +8,7 @@ export interface Sale {
   payMethodId: number;
 }
 
-export interface TempSaleProduct {
+export interface ITempSaleProduct {
   id: number;
   product_id: number;
   quantity: number;
@@ -47,20 +47,20 @@ const createSale = async (
 
 
 // Obtener items temporarios
-const getTempProds = async (): Promise<TempSaleProduct[]> => {
+const getTempProds = async (): Promise<ITempSaleProduct[]> => {
   const [rows] = await db.execute(
     `SELECT id, product_id, quantity, unit_price
      FROM temporary_sales_items`
   );
 
-  return rows as TempSaleProduct[];
+  return rows as ITempSaleProduct[];
 };
 
 
 // Insertar items de la venta definitiva
 const createSaleItem = async (
   ticketNumber: number,
-  item: TempSaleProduct
+  item: ITempSaleProduct
 ): Promise<void> => {
   const { product_id, quantity, unit_price } = item;
 console.log(`ticketnumber: ${ticketNumber} productId: ${product_id} quantity: ${quantity} unitPrice: ${unit_price}`);
@@ -81,23 +81,24 @@ console.log(`ticketnumber: ${ticketNumber} productId: ${product_id} quantity: ${
 // ======================
 // Vaciar la tabla temporaria de un usuario
 // ======================
-const clearTempProds = async (): Promise<void> => {
+const clearTempProds = async (userId: number): Promise<void> => {
   await db.execute(
-    `DELETE FROM temporary_sales_items`
+    `DELETE FROM temporary_sales_items WHERE user_id = ?`,
+    [userId]
   );
 };
 
 // ======================
 // Obtener todas las ventas
 // ======================
-const getAllSales = async (): Promise<Sale[]> => {
+const getAllSales = async (): Promise<ISales[]> => {
   const [rows] = await db.execute(
     `SELECT s.id, s.ticket_number, s.user_id, s.date_sale, s.pay_method_id
      FROM sales s
      ORDER BY s.date_sale DESC`
   );
 
-  return rows as Sale[];
+  return rows as ISales[];
 };
 
 export {

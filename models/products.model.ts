@@ -1,19 +1,19 @@
 import { db } from '../config/db';
 
-interface Product {
+interface IProduct {
 	code: number;
 	description: string;
 	price: number;
 	stock: number;
 }
 
-interface ProductResponse {
+interface IProductResponse {
   pages: number;
   totalElements: number;
-  values: Product[];
+  values: IProduct[];
 }
 
-interface GetStockParams {
+interface IGetStockParams {
   page: number;
   size: number;
   description?: string;
@@ -26,7 +26,7 @@ const getProductByCode = async (code: number) => {
             'SELECT id, description, price, stock FROM products WHERE id = ?',
             [code]
         );
-        const products = rows as Product[];
+        const products = rows as IProduct[];
         return products.length ? products[0] : null;
     } catch (error) {
         throw new Error('Error al consultar el producto');
@@ -39,7 +39,7 @@ const getProductByDescription = async (description: string) => {
             'SELECT id, description, price, stock FROM products WHERE description LIKE ?',
             [`%${description}%`]
         );
-        const products = rows as Product[];
+        const products = rows as IProduct[];
         return products;
     } catch (error) {
         throw new Error('Error al consultar el producto');
@@ -47,12 +47,9 @@ const getProductByDescription = async (description: string) => {
 };
 
 
-const getStock = async ({ 
-  page, 
-  size, 
-  description, 
-  price 
-}: GetStockParams): Promise<ProductResponse> => {
+const getStock = async ( params : IGetStockParams): Promise<IProductResponse> => {
+  const { page, size, description, price } = params;
+
 	const limit = size;
 	const to = (page - 1) * size;
 	const whereClauses: string[] = [];
@@ -79,7 +76,7 @@ const getStock = async ({
 
 	const [rows] = await db.execute(query, values);
 	const [countResult]: any = await db.execute(queryCount, values.slice(0, -2));
-	const products = rows as Product[];
+	const products = rows as IProduct[];
 	const totalElements = Number(countResult[0].total || 0);
 	const totalPages = Math.ceil(totalElements / size);
 
