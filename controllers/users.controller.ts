@@ -7,6 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 const login = async (req: Request, res: Response) => {
 	const { email, password } = req.body;
+
 	try {
 		if (!email) {
 			return res.status(400).json({ message: 'El campo email es obligatorio' });
@@ -18,13 +19,19 @@ const login = async (req: Request, res: Response) => {
 		}
 
 		const userData = await findUserByEmail(email);
+
 		if (!userData) {
 			return res.status(401).json({ message: 'Credenciales inválidas' });
 		}
 		
-		/*TO DO: remove this comment when we have the encriptation code
-		const isMatch = await bcrypt.compare(password, userData.password);*/
-		const isMatch = true;
+		
+console.log("=== CHECK BCRYPT ===");
+console.log("Password plano:", password);
+console.log("Password hash DB:", userData.password);
+
+		const isMatch = await bcrypt.compare(password, userData.password);
+		/* const isMatch = true; */
+console.log("Resultado bcrypt.compare:", isMatch);
 		if (!isMatch) {
 			return res.status(401).json({ message: 'Credenciales inválidas' });
 		}
