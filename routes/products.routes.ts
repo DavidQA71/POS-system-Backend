@@ -2,15 +2,19 @@ import express from 'express';
 import { 
   getProductsByCode, 
   getProductsByDescription,
+  getStockProducts,
 } from '../controllers/products.controller';
 import { authenticateToken } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 // @ts-ignore
+//obtener stock de productos con paginación y filtros
+router.get('/stock', authenticateToken, getStockProducts);
 //obtener productos por código
-router.get('/:code', authenticateToken, getProductsByCode);
+router.get('/by-code/:code', authenticateToken, getProductsByCode);
 //obtener productos por string
-router.get('/', authenticateToken, getProductsByDescription);
+router.get('/by-name/:text', authenticateToken, getProductsByDescription);
+//tengo que cambiar el controller para que busque por query en vez de params
 
 
 export default router;
