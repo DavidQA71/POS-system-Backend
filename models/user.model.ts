@@ -44,5 +44,19 @@ const findUserRoleById = async (userId: number) => {
     }
 };
 
+const createUser = async (user: Partial<User>) => {
+	try {
+		const { name, email, password } = user;
+		const [result] = await db.execute(
+			'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+			[name, email, password]
+		);
+		const insertId = (result as any).insertId;
+		return { id: insertId, email, password } as User;
+	} catch (error) {
+		throw new Error('Error al crear el usuario en la base de datos');
+	}
+};
 
-export { findUserByEmail, findUserRoleById };
+
+export { findUserByEmail, findUserRoleById, createUser };
